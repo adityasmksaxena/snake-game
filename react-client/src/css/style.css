@@ -41,3 +41,11 @@ code {
   width: 10px;
   background: red;
 }
+
+.cell--snake {
+  background: black;
+}
+
+.cell--food {
+  background: yellow;
+}

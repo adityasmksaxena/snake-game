@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 
-export default function Cell({ isSnakeBody, isFood }) {
-  return (
-    <div className={`cell ${isSnakeBody ? 'cell--snake' : ''}${isFood ? 'cell--food' : ''}`} />
-  );
+export default class Cell extends PureComponent {
+  render() {
+    const { isSnakeCell, isFoodCell } = this.props;
+    return (
+      <div
+        className={`cell ${isSnakeCell ? 'cell--snake' : ''}${isFoodCell ? 'cell--food' : ''}`}
+      />
+    );
+  }
 }
