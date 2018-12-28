@@ -6,14 +6,16 @@ import Snake from './Snake';
 const ENTER = 'Enter';
 const ESCAPE = 'Escape';
 const SPACEBAR = ' ';
+
+const SIZE = 30;
 export default class GameBoard extends Component {
   constructor(props) {
     super(props);
     this.snake = new Snake();
     this.state = {
-      size: 60,
+      size: SIZE,
       snakeBody: this.snake.body,
-      foodLocation: [20, 30],
+      foodLocation: [20, 20],
       status: GAME_STATUS.notStarted,
     };
   }
@@ -26,8 +28,8 @@ export default class GameBoard extends Component {
   }
 
   generateRandomFoodLocation = () => {
-    const i = Math.floor(Math.random() * (59 + 1));
-    const j = Math.floor(Math.random() * (59 + 1));
+    const i = Math.floor(Math.random() * SIZE);
+    const j = Math.floor(Math.random() * SIZE);
     if (this.snake.find([i, j])) return this.generateRandomFoodLocation();
     return [i, j];
   };
@@ -59,6 +61,15 @@ export default class GameBoard extends Component {
     }
   };
 
+  shouldUpdateDirection = ((t1 = Date.now()) => (t2 = Date.now()) => {
+    console.log(t2 - t1);
+    if (t2 - t1 > 50) {
+      t1 = t2;
+      return true;
+    }
+    return false;
+  })();
+
   handleKeyPress = ({ key }) => {
     console.log(this.snake);
     if (DIRECTION_KEYS.includes(key)) {
@@ -68,7 +79,9 @@ export default class GameBoard extends Component {
       if (
         !((snakeDirection[0] === 0 && val[0] === 0) || (snakeDirection[1] === 0 && val[1] === 0))
       ) {
-        this.snake.direction = val;
+        if (this.shouldUpdateDirection()) {
+          this.snake.direction = val;
+        }
       }
     } else if (key === ENTER || key === SPACEBAR) {
       this.handleEnter();
@@ -92,6 +105,16 @@ export default class GameBoard extends Component {
     return res;
   };
   render() {
-    return <div className="game">{this.renderCells()}</div>;
+    return (
+      <div
+        className="game"
+        style={{
+          height: SIZE * 10,
+          width: SIZE * 10,
+        }}
+      >
+        {this.renderCells()}
+      </div>
+    );
   }
 }
