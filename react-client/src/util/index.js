@@ -1,8 +1,8 @@
 const GAME_STATUS = {
-  notStarted: 0,
-  inProgress: 1,
-  paused: 2,
-  ended: 3,
+  notStarted: 'Press Enter or Spacebar to start the game',
+  inProgress: 'Playing',
+  paused: 'Paused',
+  ended: 'Game Ended',
 };
 
 const DIRECTION_KEYS = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'];

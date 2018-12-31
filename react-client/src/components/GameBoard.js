@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { GAME_STATUS, DIRECTION_KEYS, DIRECTION_MAP } from '../util';
 import Cell from './Cell';
 import Snake from './Snake';
@@ -7,7 +7,7 @@ const ENTER = 'Enter';
 const ESCAPE = 'Escape';
 const SPACEBAR = ' ';
 
-const SIZE = 30;
+const SIZE = 25;
 export default class GameBoard extends Component {
   constructor(props) {
     super(props);
@@ -34,12 +34,20 @@ export default class GameBoard extends Component {
     return [i, j];
   };
 
-  handleEnter = () => {
+  handleGameStatus = () => {
+    const { status, foodLocation } = this.state;
+    let newStatus = status === GAME_STATUS.inProgress ? GAME_STATUS.paused : GAME_STATUS.inProgress;
+    let newFoodLocation = foodLocation;
+    if (status === GAME_STATUS.ended) {
+      this.snake.body = [[0, 0]];
+      this.snake.direction = DIRECTION_MAP.ArrowRight;
+      newFoodLocation = this.generateRandomFoodLocation();
+    }
     this.setState(
-      prevState =>
-        prevState.status === GAME_STATUS.inProgress
-          ? { status: GAME_STATUS.paused }
-          : { status: GAME_STATUS.inProgress },
+      prevState => ({
+        status: newStatus,
+        foodLocation: newFoodLocation,
+      }),
       () => {
         if (this.state.status === GAME_STATUS.inProgress)
           this.animationRequestId = window.requestAnimationFrame(this.handleMove);
@@ -48,10 +56,16 @@ export default class GameBoard extends Component {
   };
 
   handleMove = () => {
-    const snakeBody = this.snake.move();
+    const { snakeBody, ateFood, isDead } = this.snake.move(this.state.foodLocation, SIZE);
     if (this.state.status === GAME_STATUS.inProgress) {
+      const foodLocation = ateFood ? this.generateRandomFoodLocation() : this.state.foodLocation;
+      const status = isDead ? GAME_STATUS.ended : this.state.status;
       this.setState(
-        () => ({ snakeBody }),
+        prevState => ({
+          snakeBody,
+          foodLocation,
+          status,
+        }),
         () => {
           this.snake.body = snakeBody;
           if (this.state.status === GAME_STATUS.inProgress)
@@ -62,7 +76,6 @@ export default class GameBoard extends Component {
   };
 
   shouldUpdateDirection = ((t1 = Date.now()) => (t2 = Date.now()) => {
-    console.log(t2 - t1);
     if (t2 - t1 > 50) {
       t1 = t2;
       return true;
@@ -71,11 +84,11 @@ export default class GameBoard extends Component {
   })();
 
   handleKeyPress = ({ key }) => {
-    console.log(this.snake);
+    // console.log(this.snake);
     if (DIRECTION_KEYS.includes(key)) {
       const val = DIRECTION_MAP[key];
       const snakeDirection = this.snake.direction;
-      console.log(val, snakeDirection);
+      // console.log(val, snakeDirection);
       if (
         !((snakeDirection[0] === 0 && val[0] === 0) || (snakeDirection[1] === 0 && val[1] === 0))
       ) {
@@ -84,7 +97,7 @@ export default class GameBoard extends Component {
         }
       }
     } else if (key === ENTER || key === SPACEBAR) {
-      this.handleEnter();
+      this.handleGameStatus();
     } else if (key === ESCAPE) {
       this.setState(() => ({ status: GAME_STATUS.ended }));
     }
@@ -106,15 +119,18 @@ export default class GameBoard extends Component {
   };
   render() {
     return (
-      <div
-        className="game"
-        style={{
-          height: SIZE * 10,
-          width: SIZE * 10,
-        }}
-      >
-        {this.renderCells()}
-      </div>
+      <Fragment>
+        <div>{this.state.status}</div>
+        <div
+          className="game"
+          style={{
+            height: SIZE * 10,
+            width: SIZE * 10,
+          }}
+        >
+          {this.renderCells()}
+        </div>
+      </Fragment>
     );
   }
 }
