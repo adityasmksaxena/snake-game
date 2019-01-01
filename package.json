@@ -20,9 +20,9 @@
   "scripts": {
     "start": "node node-server/server.js",
     "server": "nodemon node-server/server.js",
-    "client": "cd client && yarn start",
+    "client": "cd react-client && yarn start",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
-    "heroku-postbuild": "cd client && yarn && yarn build",
+    "heroku-postbuild": "cd react-client && yarn && yarn build",
     "format": "prettier --write \"src/**/*.{js, jsx, css, json}\""
   },
   "dependencies": {
