@@ -13,7 +13,7 @@ if (isProduction) {
   app.use(express.static('client/build'));
   const path = require('path');
   app.get('*', (req, res) => {
-    path.resolve(__dirname, 'client', 'build', 'index.html');
+    path.resolve(__dirname, 'react-client', 'build', 'index.html');
   });
 }
 
