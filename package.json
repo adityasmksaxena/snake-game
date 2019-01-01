@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "node-server/server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adityasmksaxena/snake-game.git"
@@ -16,6 +13,18 @@
     "url": "https://github.com/adityasmksaxena/snake-game/issues"
   },
   "homepage": "https://github.com/adityasmksaxena/snake-game#readme",
+  "engines": {
+    "node": "10.13.0",
+    "npm": "6.4.1"
+  },
+  "scripts": {
+    "start": "node node-server/server.js",
+    "server": "nodemon node-server/server.js",
+    "client": "cd client && yarn start",
+    "dev": "concurrently \"yarn server\" \"yarn client\"",
+    "heroku-postbuild": "cd client && yarn && yarn build",
+    "format": "prettier --write \"src/**/*.{js, jsx, css, json}\""
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4"
