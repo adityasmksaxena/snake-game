@@ -121,6 +121,7 @@ export default class GameBoard extends Component {
     return (
       <Fragment>
         <div>{this.state.status}</div>
+        <div>Score : {this.snake.body.length}</div>
         <div
           className="game"
           style={{
