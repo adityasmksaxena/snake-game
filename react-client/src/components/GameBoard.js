@@ -8,6 +8,7 @@ const ESCAPE = 'Escape';
 const SPACEBAR = ' ';
 
 const SIZE = 25;
+const UPDATE_DELAY_MS = 100;
 export default class GameBoard extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ export default class GameBoard extends Component {
   generateRandomFoodLocation = () => {
     const i = Math.floor(Math.random() * SIZE);
     const j = Math.floor(Math.random() * SIZE);
-    if (this.snake.find([i, j])) return this.generateRandomFoodLocation();
+    if (this.snake.find(i, j)) return this.generateRandomFoodLocation();
     return [i, j];
   };
 
@@ -49,8 +50,9 @@ export default class GameBoard extends Component {
         foodLocation: newFoodLocation,
       }),
       () => {
-        if (this.state.status === GAME_STATUS.inProgress)
+        if (this.state.status === GAME_STATUS.inProgress) {
           this.animationRequestId = window.requestAnimationFrame(this.handleMove);
+        }
       }
     );
   };
@@ -68,8 +70,11 @@ export default class GameBoard extends Component {
         }),
         () => {
           this.snake.body = snakeBody;
-          if (this.state.status === GAME_STATUS.inProgress)
-            this.animationRequestId = window.requestAnimationFrame(this.handleMove);
+          if (this.state.status === GAME_STATUS.inProgress) {
+            setTimeout(() => {
+              this.animationRequestId = window.requestAnimationFrame(this.handleMove);
+            }, UPDATE_DELAY_MS);
+          }
         }
       );
     }
@@ -120,14 +125,10 @@ export default class GameBoard extends Component {
   render() {
     return (
       <Fragment>
-        <div>{this.state.status}</div>
-        <div>Score : {this.snake.body.length}</div>
+        <h1 className="game-status">{this.state.status}</h1>
+        <h2 className="game-score">Score : {this.snake.body.length}</h2>
         <div
           className="game"
-          style={{
-            height: SIZE * 10,
-            width: SIZE * 10,
-          }}
         >
           {this.renderCells()}
         </div>

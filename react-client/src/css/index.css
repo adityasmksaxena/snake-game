@@ -31,12 +31,22 @@ code {
 
 .game {
   background: green;
+  height: calc(25 * 20px);
+  width: calc(25 * 20px);
+}
+
+.game-status {
+  margin: 10px 15px;
+}
+
+.game-score {
+  margin: 10px 15px;
 }
 
 .cell {
   display: inline-block;
-  height: 10px;
-  width: 10px;
+  height: 20px;
+  width: 20px;
   background: red;
 }
 

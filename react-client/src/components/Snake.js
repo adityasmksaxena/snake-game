@@ -17,6 +17,7 @@ export default class Snake {
     const j = curHead[1] + this.direction[1];
     let isDead = false;
     if (i === SIZE || i === -1 || j === SIZE || j === -1) isDead = true;
+    if(this.find(i, j)) isDead = true;
     const newHead = [i, j];
     let curSnakeBody = this.body;
     let ateFood = true;

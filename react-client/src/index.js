@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/style.css';
+import './css/index.css';
 import SnakeGameBoard from './components/GameBoard';
 import * as serviceWorker from './serviceWorker';
 
